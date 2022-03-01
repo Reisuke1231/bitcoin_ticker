@@ -20,24 +20,18 @@ class _PriceScreenState extends State<PriceScreen> {
   initState() {
     super.initState();
 
-    setState(() {
-      setCoinPrice(selectedCoin, selectedFiat);
-    });
+    setCoinPrice(selectedCoin, selectedFiat);
   }
 
   Future<void> setCoinPrice(String selectedCoin, String selectedFiat) async {
     dynamic cryptoCurrencyData =
         await exchangeModel.getCoinFiatData(selectedCoin, selectedFiat);
 
-    print('cryptoCurrencyData: $cryptoCurrencyData');
-
     var tmpCoinPrice = cryptoCurrencyData[selectedCoin.toLowerCase()]
         [selectedFiat.toLowerCase()];
 
     setState(() {
       coinPrice = tmpCoinPrice.toString();
-
-      print('COIN PRICE: $coinPrice');
     });
   }
 
@@ -58,8 +52,8 @@ class _PriceScreenState extends State<PriceScreen> {
       onChanged: (value) {
         setState(() {
           selectedFiat = value!;
-          setCoinPrice(selectedCoin, selectedFiat);
         });
+        setCoinPrice(selectedCoin, selectedFiat);
       },
     );
   }
