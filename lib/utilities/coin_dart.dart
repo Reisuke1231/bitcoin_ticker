@@ -23,14 +23,14 @@ const List<String> currenciesList = [
 ];
 
 const List<String> cryptoList = [
-  'BTC',
-  'ETH',
-  'LTC',
-  'BNB',
-  'XRP',
-  'DOGE',
-  'SHIB',
-  'UNI',
+  'Bitcoin',
+  'Ethereum',
+  'Litecoin',
+  'Binancecoin',
+  'Ripple',
+  'Dogecoin',
+  'Shiba-inu',
+  'Uniswap',
 ];
 
 class CoinData {

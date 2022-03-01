@@ -1,19 +1,45 @@
 import 'dart:io' show Platform;
 
+import 'package:bitcoin_ticker/services/exchange_model.dart';
+import 'package:bitcoin_ticker/utilities/coin_dart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'coin_dart.dart';
-
 class PriceScreen extends StatefulWidget {
-  const PriceScreen({Key? key}) : super(key: key);
-
   @override
   _PriceScreenState createState() => _PriceScreenState();
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  String selectedCurrency = 'USD';
+  String selectedCoin = 'Bitcoin';
+  String selectedFiat = 'USD';
+  String coinPrice = '---';
+
+  ExchangeModel exchangeModel = ExchangeModel();
+
+  initState() {
+    super.initState();
+
+    setState(() {
+      setCoinPrice(selectedCoin, selectedFiat);
+    });
+  }
+
+  Future<void> setCoinPrice(String selectedCoin, String selectedFiat) async {
+    dynamic cryptoCurrencyData =
+        await exchangeModel.getCoinFiatData(selectedCoin, selectedFiat);
+
+    print('cryptoCurrencyData: $cryptoCurrencyData');
+
+    var tmpCoinPrice = cryptoCurrencyData[selectedCoin.toLowerCase()]
+        [selectedFiat.toLowerCase()];
+
+    setState(() {
+      coinPrice = tmpCoinPrice.toString();
+
+      print('COIN PRICE: $coinPrice');
+    });
+  }
 
   DropdownButton<String> androidDropdown() {
     List<DropdownMenuItem<String>> dropdownItemList = [];
@@ -27,11 +53,12 @@ class _PriceScreenState extends State<PriceScreen> {
     }
 
     return DropdownButton<String>(
-      value: selectedCurrency,
+      value: selectedFiat,
       items: dropdownItemList,
       onChanged: (value) {
         setState(() {
-          selectedCurrency = value!;
+          selectedFiat = value!;
+          setCoinPrice(selectedCoin, selectedFiat);
         });
       },
     );
@@ -76,7 +103,7 @@ class _PriceScreenState extends State<PriceScreen> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = ? USD',
+                  '1 $selectedCoin = $coinPrice $selectedFiat',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
